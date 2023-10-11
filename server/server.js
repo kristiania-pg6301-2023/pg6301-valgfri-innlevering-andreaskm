@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 export const TODOS = [
     {
         id: 1,
-        name: "Ta oppvasken",
+        name: "Ta oppvasken server",
         status: "todo"
     },
     {
@@ -34,11 +34,48 @@ export const TODOS = [
 app.get("/api/todos", (req,res) =>{
     res.json(TODOS);
 })
-
+//Add todo route
 app.post("/api/todos", (req,res)=>{
     const newTodo = req.body;
+    console.log(newTodo)
+
+
     newTodo.id = TODOS.length + 1;
+    newTodo.status = "todo";
 
     TODOS.push(newTodo);
-    res.json(newTodo);
+    res.status(201).json(newTodo);
+    res.send();
+})
+
+//Add handle start doing
+app.post("/api/todos/start-doing/:id", (req,res) =>{
+    const id = parseInt(req.params.id);
+
+    const todo = TODOS.find(t=>t.id === id);
+
+    if (todo){
+        todo.status = "doing";
+        res.json(todo);
+    }else{
+        res.status(404).json({error: "todo not found"})
+    }
+
+})
+
+//Add handle complete
+
+app.post("/api/todos/complete/:id", (req,res) =>{
+    const id = parseInt(req.params.id);
+
+    const todo = TODOS.find(t=>t.id === id);
+
+    if (todo){
+        console.log(todo.name + " is now flagged as done")
+        todo.status = "done";
+        res.json(todo);
+    }else{
+        res.status(404).json({error: "todo not found"})
+    }
+
 })

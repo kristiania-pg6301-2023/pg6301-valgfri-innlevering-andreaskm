@@ -5,7 +5,7 @@ import "../styles/app-style.css"
 export function MainPage(){
     return(
         <>
-            <header><h1>Header</h1></header>
+            <header><h1>To-Do Application</h1></header>
             <main>
                 <TodoApplication />
             </main>
@@ -26,53 +26,74 @@ function TodoApplication(){
     }
     useEffect(() =>{
         loadTodos();
+        todos.map(t =>{
+            console.log("Loaded " + t.name)
+        })
     }, []);
 
-    function addTodo(){
-        if(newTodo.trim() === ""){
-            return;
+    //implementing client talking to server
+    async function handleAddTodo(name){
+        console.log("Sending todo object: " + JSON.stringify(name))
+        await fetch("/api/todos", {
+            method: "POST",
+            body: JSON.stringify({name}),
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        loadTodos();
+    }
+
+
+    async function handleStartDoing(id){
+        const response = await fetch(`/api/todos/start-doing/${id}`, {
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json",
+            },
+        });
+
+        if(response.ok){
+            const updatedTodos = todos.map((todo) =>{
+                if(todo.id === id){
+                    return {...todo, status: "doing"}
+                }
+                return todo;
+            });
+            setTodos(updatedTodos)
         }
-
-        const newTodoItem = {
-            id: todos.length+1,
-            name: newTodo,
-            status: "todo"
-        };
-
-        setTodos([...todos, newTodoItem]);
-        setNewTodo("");
     }
 
-    function handleStartDoing(id){
-        const updatedTodos = todos.map((todo) =>{
-            if(todo.id === id){
-                return {...todo, status: "doing"}
-            }
-            return todo;
+    async function handleComplete(id){
+        const response = await fetch(`/api/todos/complete/${id}`, {
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json",
+            },
         });
-        setTodos(updatedTodos);
-    }
 
-    function handleComplete(id){
-        const updatedTodos = todos.map((todo) =>{
-            if(todo.id === id){
-                return{...todo, status: "done"}
-            }
-            return todo;
-        });
-        setTodos(updatedTodos);
+        if(response.ok){
+            const updatedTodos = todos.map((todo) =>{
+                if(todo.id === id){
+                    return {...todo, status: "done"}
+                }
+                return todo;
+            });
+            setTodos(updatedTodos)
+        }
     }
 
     return(
         <>
-            <div>
+            <div className="add-todo-field">
                 <input type="text"
                 placeholder="Enter a new todo"
                 value={newTodo}
                 onChange={(e) => setNewTodo(e.target.value)}
                 />
-                <button onClick={addTodo}>Add new todo</button>
+                <button onClick={() => handleAddTodo(newTodo)}>Add new todo</button>
             </div>
+            <div className="todo-list">
             {todos.map( (todo) => (
                 <div key={todo.id}>
                     <h2>{todo.name}</h2>
@@ -91,6 +112,7 @@ function TodoApplication(){
                     </div>
                 </div>
             ))}
+            </div>
         </>
     )
 }
