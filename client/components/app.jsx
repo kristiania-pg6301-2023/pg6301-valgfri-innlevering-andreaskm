@@ -52,6 +52,7 @@ function TodoApplication(){
                 "Content-Type": "application/json",
             },
         });
+        loadTodos();
 
         if(response.ok){
             const updatedTodos = todos.map((todo) =>{
@@ -71,6 +72,7 @@ function TodoApplication(){
                 "Content-Type": "application/json",
             },
         });
+        loadTodos();
 
         if(response.ok){
             const updatedTodos = todos.map((todo) =>{
@@ -95,18 +97,19 @@ function TodoApplication(){
             </div>
             <div className="todo-list">
             {todos.map( (todo) => (
-                <div key={todo.id}>
+                <div key={todo._id}>
                     <h2>{todo.name}</h2>
                     <p>{todo.status}</p>
+                    <p>{todo._id}</p>
                     <div>
                         {todo.status === "todo" && (
                             <>
-                                <button onClick={() => handleStartDoing(todo.id)}>Start doing</button>
+                                <button onClick={() => handleStartDoing(todo._id)}>Start doing</button>
                             </>
                         )}
                         {todo.status === "doing" &&(
                             <>
-                                <button onClick={()=> handleComplete(todo.id)}>complete</button>
+                                <button onClick={()=> handleComplete(todo._id)}>complete</button>
                             </>
                         )}
                     </div>
