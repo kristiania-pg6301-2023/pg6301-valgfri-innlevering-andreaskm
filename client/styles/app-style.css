@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+}
+
+#root{
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-entity{
+    background-color: black;
+    border: 1px solid black;
+}
+
+.add-todo-field {
+}
+header{
+    text-align: center;
+}
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
