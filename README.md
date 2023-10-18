@@ -2,4 +2,6 @@
 
 Heroku Link: https://todo-app-test-andreas-8258ca3b51d9.herokuapp.com/
 
+Hadde også med en implementasjon av mongodb (Kommentert ut i server koden) men fikk ikke deployet på heroku med det... Vi skal jobbe på videre og finne ut av dette her! 
+
 Av Preben Øhre og Andreas Krøger Madsen
