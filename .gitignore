@@ -1,0 +1,9 @@
+/client/node_modules/
+/client/dist/
+/client/.parcel-cache/
+/server/node_modules/
+/server/dist/
+/node_modules/
+
+/qodana.yaml
+/server/.env/
